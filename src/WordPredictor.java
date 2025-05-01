@@ -110,6 +110,30 @@ public class WordPredictor {
         // On my computer the linear version causes the tests to take about 20seconds, and the log
         // version runs in less than two. Your results may vary.
         // Hint: The Random class has an instance method "nextDouble" that returns a value in the range [0., 1.]
+        double threshold = rng.nextDouble();
+
+        List<WordProbability> possibleWords = probs.get(word);
+
+        int left = 0;
+        int right = possibleWords.size() - 1;
+        
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+
+            if (possibleWords.get(mid).cumulativeProbability() <= threshold) {
+                return possibleWords.get(mid).word();
+            } else if (possibleWords.get(mid).cumulativeProbability() > threshold) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
         return null;
+    }
+
+    public static void main(String[] args) {
+        
+
+
     }
 }
