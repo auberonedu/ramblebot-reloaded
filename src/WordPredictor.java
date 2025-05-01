@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -110,6 +111,44 @@ public class WordPredictor {
         // On my computer the linear version causes the tests to take about 20seconds, and the log
         // version runs in less than two. Your results may vary.
         // Hint: The Random class has an instance method "nextDouble" that returns a value in the range [0., 1.]
-        return null;
+        List<WordProbability> probsList = probs.get(word);
+        
+        double threshold = rng.nextDouble();
+        System.out.println(threshold);
+
+        int left = 0;
+        int right = probsList.size() - 1;
+        int mid;
+
+        while(left <= right) {
+            mid = left + (right - left)/2;
+
+            if(probsList.get(mid).cumulativeProbability() > threshold) {
+                return probsList.get(mid).word();
+            } else if (probsList.get(mid).cumulativeProbability() > threshold) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+
+        }
+        return "hi";
+    }
+
+    public static void main(String[] args) {
+    
+        Map<String, List<WordProbability>> probs = new HashMap<>();
+        probs.put("example", List.of(
+            new WordProbability("cat", 0.2),
+            new WordProbability("dog", 0.5),
+            new WordProbability("lizard", 1.0)
+        ));
+
+        Random rng = new Random();
+
+        WordPredictor predictor = new WordPredictor(probs, rng);
+
+        String result = predictor.predict("example");
+        System.out.println("Prediction result: " + result);
     }
 }
