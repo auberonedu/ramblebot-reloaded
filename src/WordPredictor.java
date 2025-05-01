@@ -110,6 +110,15 @@ public class WordPredictor {
         // On my computer the linear version causes the tests to take about 20seconds, and the log
         // version runs in less than two. Your results may vary.
         // Hint: The Random class has an instance method "nextDouble" that returns a value in the range [0., 1.]
+        double randomNumber = rng.nextDouble();
+        List<WordProbability> bucketList = probs.get(word);
+        
+        // Use nextDouble() on rng to create a local variable for our "random" number.
+        // Access the List of WordProbabilities tied to passed-in word using probs.
+        // By either creating a local List to iterate through it.
+        // Binary-search through the list to find the next word that meets or exceeds "random" number threshold.
+        // Return the string that is associated with the "bucket" that "random" number lands in.
+
         return null;
     }
 }
