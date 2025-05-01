@@ -111,11 +111,26 @@ public class WordPredictor {
      * @return the predicted next word
      */
     public String predict(String word) {
-        // Implement this so it runs in O(log(n)) time where n is probs.get(word).size()
-        // Having a hard time getting started? Implement it in O(n) time first, then optimize.
-        // On my computer the linear version causes the tests to take about 20seconds, and the log
-        // version runs in less than two. Your results may vary.
-        // Hint: The Random class has an instance method "nextDouble" that returns a value in the range [0., 1.]
-        return null;
+        List<WordProbability> list = probs.get(word);
+        if (list == null) {
+            throw new IllegalArgumentException("No predictions for word: " + word);
+        }
+    
+        double r = rng.nextDouble();
+    
+        int low = 0;
+        int high = list.size() - 1;
+
+        while (low < high) {
+            int mid = (low + high) / 2;
+            if (r < list.get(mid).cumulativeProbability()) {
+                high = mid;
+            } else {
+                low = mid + 1;
+            }
+        }
+    
+        // returning the matching word
+        return list.get(low).word();
     }
 }
