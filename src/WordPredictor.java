@@ -116,6 +116,30 @@ public class WordPredictor {
         // On my computer the linear version causes the tests to take about 20seconds, and the log
         // version runs in less than two. Your results may vary.
         // Hint: The Random class has an instance method "nextDouble" that returns a value in the range [0., 1.]
-        return null;
+
+        // check if the word is in the map
+        List<WordProbability> list = probs.get(word);
+
+        // if the word is not found, throw an exception
+        if (list == null) {
+            throw new IllegalArgumentException("Word not found in the probability map" + word);
+        }
+
+        double randomValue = rng.nextDouble();
+
+        // binary search for the word
+        int low = 0;
+        int high = list.size() - 1;
+        
+        while (low < high) {
+            int mid = (low + high) / 2;
+            if (randomValue < list.get(mid).cumulativeProbability()) {
+                high = mid;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return list.get(low).word();
     }
 }
