@@ -126,20 +126,12 @@ public class WordPredictor {
         while (left < right) {
             int mid = left + (right - left) / 2;
 
-            if (possibleWords.get(mid).cumulativeProbability() <= threshold) {
-                return possibleWords.get(mid).word();
-            } else if (possibleWords.get(mid).cumulativeProbability() > threshold) {
-                right = mid;
-            } else {
+            if (possibleWords.get(mid).cumulativeProbability() < threshold) {
                 left = mid + 1;
+            } else {
+                right = mid;
             }
         }
-        return null;
-    }
-
-    public static void main(String[] args) {
-        
-
-
+        return possibleWords.get(left).word();
     }
 }
