@@ -120,20 +120,20 @@ public class WordPredictor {
         double chance = rng.nextDouble();
 
         int low = 0;
-        int high = currentWord.size();
+        int high = currentWord.size() - 1;
+        int result = -1;
 
         while (low <= high){
             int mid = low + (high - low) / 2;
             double currentProb = currentWord.get(mid).cumulativeProbability();
-            if(chance <= currentProb  && chance >= currentWord.get(mid - 1).cumulativeProbability()){
-                return currentWord.get(mid).word();
-            }else if (chance < currentProb){
-                high = mid;
-            } else{
+            if(chance <= currentProb){
+                result = mid;
+                high = mid - 1;
+            }else{
                 low = mid + 1;
             }
         }
-        return null;
+        return currentWord.get(result).word();
     }
 
     
