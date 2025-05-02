@@ -129,18 +129,17 @@ public class WordPredictor {
 
         // binary search
         while (left < right){
-            int mid = (left + (right - left)) / 2;
-
+            int mid = left + (right - left) / 2;
             WordProbability midWord = nextWords.get(mid);
             
             Double probability = midWord.cumulativeProbability();
-            probableWord = midWord.word();
-
+            
             if (probability == threshold){
                 return midWord.word();
             } else if (probability < threshold){
                 left = mid + 1;
             } else if (probability > threshold){
+                probableWord = midWord.word();
                 right = mid;
             }
         }
