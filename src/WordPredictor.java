@@ -116,6 +116,31 @@ public class WordPredictor {
         // On my computer the linear version causes the tests to take about 20seconds, and the log
         // version runs in less than two. Your results may vary.
         // Hint: The Random class has an instance method "nextDouble" that returns a value in the range [0., 1.]
-        return null;
+
+        // Access the list of WordProbabilities tied to passed-in word using probs
+        // by creating a local list to iterate through it.
+        List<WordProbability> bucketList = probs.get(word); 
+        
+        // Throw exception if null.
+        if (bucketList == null) {                           
+            throw new IllegalArgumentException("Probabilties are empty.");
+        }
+
+        double randomNum = rng.nextDouble(); // Use nextDouble() on rng to create a local variable for our "random" number.
+        int low = 0; // low pointer for binary search
+        int high = bucketList.size() - 1; // high pointer for binary search
+        
+        // Binary-search through the list to find the next word that meets or exceeds "random" number threshold.
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            if (bucketList.get(mid).cumulativeProbability() < randomNum) {
+                low = mid + 1;
+            } else {
+                high = mid;
+            }
+        }
+        
+        // Return the string that is associated with the "bucket" that "random" number lands in.
+        return bucketList.get(low).word();
     }
 }
