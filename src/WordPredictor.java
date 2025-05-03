@@ -125,20 +125,20 @@ public class WordPredictor {
         int left = 0;
         int right = probsList.size() - 1;
         int mid;
+        String result = null;
 
         while(left <= right) {
             mid = left + (right - left)/2;
 
-            if(probsList.get(mid).cumulativeProbability() > threshold) {
-                return probsList.get(mid).word();
-            } else if (probsList.get(mid).cumulativeProbability() > threshold) {
+            if(probsList.get(mid).cumulativeProbability() >= threshold) {
+                result = probsList.get(mid).word();
                 right = mid - 1;
             } else {
                 left = mid + 1;
             }
 
         }
-        return "hi";
+        return result;
     }
 
     public static void main(String[] args) {
