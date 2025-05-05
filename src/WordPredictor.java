@@ -116,6 +116,43 @@ public class WordPredictor {
         // On my computer the linear version causes the tests to take about 20seconds, and the log
         // version runs in less than two. Your results may vary.
         // Hint: The Random class has an instance method "nextDouble" that returns a value in the range [0., 1.]
-        return null;
+    
+        // goal probability 
+        double target = rng.nextDouble();
+        List<WordProbability> probabilities = probs.get(word);
+
+        // bounds of word array
+        int low = 0;
+        int high = probs.get(word).size() - 1;
+        int mid = ((high - low) / 2) + low;
+
+        // tracks closest probability index that is higher than target
+        int lowestHigh = high;
+
+        while (!(low > high)){
+            // get the middle value
+            mid = low + ((high - low / 2));
+
+            WordProbability currWord = probabilities.get(mid);
+            double currProb = currWord.cumulativeProbability();
+
+            
+            // look for matching prob -- get as close to target as possible
+            if (currProb == target){
+                return currWord.word();
+            } else if (currProb < target) {
+                low = mid + 1;
+            } else if (currProb > target){
+                // check if probability is lower than current lowest valid probability
+                if (currProb < probabilities.get(lowestHigh).cumulativeProbability()){
+                    lowestHigh = mid;
+                }
+                high = mid - 1;
+            }
+
+        }
+       
+
+        return probabilities.get(lowestHigh).word();
     }
 }
