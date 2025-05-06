@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -116,6 +117,26 @@ public class WordPredictor {
         // On my computer the linear version causes the tests to take about 20seconds, and the log
         // version runs in less than two. Your results may vary.
         // Hint: The Random class has an instance method "nextDouble" that returns a value in the range [0., 1.]
-        return null;
+
+        // generate random num 0-1.0 using rng.nextDouble
+        // create list of possible next words of passed word
+        // binary search to find word with probability > threshold
+        // return found word
+
+        double threshold = rng.nextDouble();
+        List<WordProbability> probabilities = probs.get(word);
+
+        int low = 0;
+        int high = probabilities.size() - 1;
+
+        while (low < high) {
+            int mid = (low + high) / 2;
+            double midProbability = probabilities.get(mid).cumulativeProbability();
+
+            if (threshold <= midProbability) high = mid;
+            else low = mid + 1;
+        }
+
+        return probabilities.get(low).word();
     }
 }
