@@ -116,6 +116,29 @@ public class WordPredictor {
         // On my computer the linear version causes the tests to take about 20seconds, and the log
         // version runs in less than two. Your results may vary.
         // Hint: The Random class has an instance method "nextDouble" that returns a value in the range [0., 1.]
-        return null;
+        List<WordProbability> list = probs.get(word);
+    
+        //generate a random number between 0.0 and 0.1
+        double target = rng.nextDouble();
+    
+        //binary search range
+        int low = 0;
+        int high = list.size() - 1;
+    
+        //binary search start here
+        while (low < high) {
+            int mid = (low + high) / 2;
+
+            //if the mid is smaller, then search the right half
+            if (list.get(mid).cumulativeProbability() < target) {
+                low = mid + 1;
+            } else {
+                //this part searchs the left half with mid
+                high = mid;
+            }
+        }
+    
+        //return the found index
+        return list.get(low).word();
     }
 }
